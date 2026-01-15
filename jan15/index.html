@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invisible Object with Visible Shadow</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f0f0f0;
+            overflow: hidden;
+        }
+
+        .background {
+            width: 80vw;
+            height: 80vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .invisible-object {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            opacity: 0; /* Полностью невидим */
+            pointer-events: none; /* Не мешает кликам */
+            box-shadow: 0 0 30px 10px rgba(0, 0, 0, 0.6);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .invisible-object:hover {
+            box-shadow: 0 0 50px 20px rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="invisible-object" id="invisibleObj"></div>
+    </div>
+
+    <script>
+        const obj = document.getElementById('invisibleObj');
+        const bg = document.querySelector('.background');
+
+        bg.addEventListener('mousemove', (e) => {
+            const rect = bg.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Ограничиваем движение объекта внутри фона
+            const maxX = rect.width - 100;
+            const maxY = rect.height - 100;
+            const clampedX = Math.max(0, Math.min(maxX, x - 50));
+            const clampedY = Math.max(0, Math.min(maxY, y - 50));
+
+            obj.style.left = `${clampedX}px`;
+            obj.style.top = `${clampedY}px`;
+        });
+    </script>
+</body>
+</html>
